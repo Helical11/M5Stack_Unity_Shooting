@@ -1,12 +1,13 @@
 #include <FastLED.h>
+#include <M5UnitGLASS2.h>
 #include <M5Unified.h>
 #include <BluetoothSerial.h>
-
 
 BluetoothSerial bts;
 
 #define LED_PIN 27
 #define LED_COUNT 25
+#define TRG_PIN 25
 
 static CRGB leds[LED_COUNT];
 
@@ -15,7 +16,20 @@ int counter = 0;
 void setup() {
 
   auto cfg = M5.config();
+  cfg.external_display.unit_glass2 = true;
   M5.begin(cfg);                           // M5デバイスの初期化
+
+  M5.Display.setTextSize(1);
+  M5.Display.println("HELLO WORLD");
+
+  for( int i = 0; i < 12; i++ ) {
+    int32_t x = 10*( i+1 );
+    int32_t y = -( 0.000025*x*x*x + 0.1*x - 60 );
+    M5.Display.fillRect(x, y, 8, 62 - y, WHITE);
+    delay(50);
+  }
+
+  pinMode(TRG_PIN, OUTPUT);
 
   Serial.begin(115200);
   bts.begin("GunController");
@@ -45,6 +59,7 @@ void loop() {
     leds[i] = CRGB::Black;
   }
   FastLED.show();
+  digitalWrite(TRG_PIN,LOW);
 
   static constexpr const char* const names[] = { "none", "wasHold", "wasClicked", "wasPressed", "wasReleased", "wasDeciedCount" };
   int state = M5.BtnA.wasHold() ? 1
@@ -63,6 +78,9 @@ void loop() {
       leds[i] = CRGB::White;
       }
       FastLED.show();
-  }
+
+      digitalWrite(TRG_PIN, HIGH);
+      delay(50);
+ }
 
 }
