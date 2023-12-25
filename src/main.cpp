@@ -133,20 +133,22 @@ void loop() {
     //----------------------------------------
     // M5StickCのボタンを押した場合の処理
     //----------------------------------------
-    //   static constexpr const char* const names[] = {
-    //       "none",       "wasHold",     "wasClicked",
-    //       "wasPressed", "wasReleased", "wasDeciedCount"};
-    //   int state = : M5.BtnA.wasPressed() ? 1 : 0;
-    //   int state = : M5.BtnB.wasPressed() ? 2 : 0;
-    //
-    //   switch (state) {
-    //       case 1:
-    //           delay(50);
-    //           break;
-    //       case 2:
-    //           delay(50);
-    //           break;
-    //       default:;
-    //           break;
-    //  }
+    static constexpr const char* const names[] = {
+        "none",       "wasHold",     "wasClicked",
+        "wasPressed", "wasReleased", "wasDeciedCount"};
+    int state = M5.BtnA.wasPressed() ? 1 : 0;
+    state = M5.BtnB.wasPressed() ? 2 : state;
+
+    switch (state) {
+        case 1:
+            Serial.println("Push A");  // シリアル送信
+            delay(50);
+            break;
+        case 2:
+            Serial.println("Push B");  // シリアル送信
+            delay(50);
+            break;
+        default:;
+            break;
+    }
 }
