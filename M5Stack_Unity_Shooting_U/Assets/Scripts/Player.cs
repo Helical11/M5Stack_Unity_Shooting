@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO.Ports;
 using System.Threading;
+using Microsoft.SqlServer.Server;
 
 public class Player : MonoBehaviour
 {
@@ -11,13 +12,16 @@ public class Player : MonoBehaviour
     private SerialPort serialPort;
     private float speed = 0.1f;
     public SerialHandler serialhandler;
+    private float pitch;
+    private float roll;
+    private float yaw;
 
-        // 受信したデータを取得する
-//        string data = serialPort.ReadLine();
-//        Debug.Log(data);
+    // 受信したデータを取得する
+    //        string data = serialPort.ReadLine();
+    //        Debug.Log(data);
 
-        //弾を生成する
-//        Instantiate(bulletPrefab, transform.position, transform.rotation);
+    //弾を生成する
+    //        Instantiate(bulletPrefab, transform.position, transform.rotation);
 
     // Start is called before the first frame update
     void Start()
@@ -29,17 +33,23 @@ public class Player : MonoBehaviour
     void OnDataReceived(string message)
     {
         var data = message.Split(
-                new string[] { "\n" }, System.StringSplitOptions.None);
-        try
+                new string[] { "," }, System.StringSplitOptions.None);
+        //        pitch = float.Parse(data[0]);
+        //        roll = float.Parse(data[1]);
+        //        yaw = float.Parse(data[2]);
+        if (data[0] == "1")
         {
-            Debug.Log(data[0]);//Unityのコンソールに受信データを表示
-        //弾を生成する
-        Instantiate(bulletPrefab, transform.position, transform.rotation);
+            try
+            {
+                Debug.Log(data[0]);//Unityのコンソールに受信データを表示
+                                   //弾を生成する
+                Instantiate(bulletPrefab, transform.position, transform.rotation);
 
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogWarning(e.Message);//エラーを表示
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning(e.Message);//エラーを表示
+            }
         }
     }
 
@@ -58,11 +68,12 @@ public class Player : MonoBehaviour
         Vector3 angle = transform.eulerAngles;
 
         angle.x = -mousePos.y * speed;
-        angle.y = mousePos.x * speed;
-        angle.z = 0;
+        //       angle.x = -pitch;
+        //        angle.y = roll;
+        //        angle.z = yaw;
 
         transform.eulerAngles = angle;
 
-        }
-
     }
+
+}

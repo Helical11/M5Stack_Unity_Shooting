@@ -1,3 +1,10 @@
+/**
+ * @file interlapttest.cpp
+ * @brief
+ * @author Helical
+ * @date 2023-12-25
+ * @copyright Copyright (c) 2023
+ */
 #include <M5Unified.h>
 
 volatile bool interruptFlag = false;  // 割り込みが発生したかを示すフラグ
